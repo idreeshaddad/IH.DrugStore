@@ -1,57 +1,44 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<IH.DrugStore.Web.Data.Entities.Drug>
+
 @{
+    ViewData["Title"] = "Drugs";
 }
+
 <h1>Drugs</h1>
+
 <hr />
-<a class="btn btn-primary" asp-controller="Drugs" asp-action="Create">Add new Drug</a>
+<p>
+    <a class="btn btn-primary" asp-action="Create">Create New Drug</a>
+</p>
 <hr />
 
-<table class="table table-hover table-striped">
+<table class="table">
     <thead>
         <tr>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Actions</th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
+@foreach (var item in Model) {
         <tr>
-            <td>Pandad 1000mg</td>
-            <td>2.75</td>
             <td>
-                <a class="btn btn-primary" asp-controller="Drugs" asp-action="Details">Details</a>
-                <a class="btn btn-warning ms-2" asp-controller="Drugs" asp-action="Edit">Edit</a>
-                <a class="btn btn-danger ms-2" asp-controller="Drugs" asp-action="Delete">Delete</a>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
-        <tr>
-            <td>Voltfast</td>
-            <td>4.95</td>
-            <td>
-                <button class="btn btn-primary">Details</button>
-                <button class="btn btn-warning ms-2">Edit</button>
-                <button class="btn btn-danger ms-2">Delete</button>
-            </td>
-        </tr>
-        <tr>
-            <td>Panadol Cold and Flu</td>
-            <td>2.00</td>
-            <td>
-                <button class="btn btn-primary">Details</button>
-                <button class="btn btn-warning ms-2">Edit</button>
-                <button class="btn btn-danger ms-2">Delete</button>
-            </td>
-        </tr>
-        <tr>
-            <td>Lyrica 300mg</td>
-            <td>63.25</td>
-            <td>
-                <button class="btn btn-primary">Details</button>
-                <button class="btn btn-warning ms-2">Edit</button>
-                <button class="btn btn-danger ms-2">Delete</button>
-            </td>
-        </tr>
+}
     </tbody>
 </table>
