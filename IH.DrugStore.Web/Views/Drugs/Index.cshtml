@@ -21,24 +21,37 @@
             <th>
                 @Html.DisplayNameFor(model => model.Price)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BarCode)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var drug in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => drug.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => drug.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => drug.BarCode)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@drug.Id" class="text-decoration-none">
+                        <i class="fa-solid fa-circle-info text-info" title="Details"></i>
+                    </a>
+                    <a asp-action="Edit" asp-route-id="@drug.Id" title="Edit" class="text-decoration-none ms-2">
+                        <i class="fa-solid fa-pencil text-primary"></i>
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@drug.Id" title="Delete" class="text-decoration-none ms-2">
+                        <i class="fa-solid fa-trash text-danger"></i>
+                    </a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

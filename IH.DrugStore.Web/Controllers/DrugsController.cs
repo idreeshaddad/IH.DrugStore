@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using IH.DrugStore.Web.Data;
 using IH.DrugStore.Web.Data.Entities;
@@ -12,6 +7,8 @@ namespace IH.DrugStore.Web.Controllers
 {
     public class DrugsController : Controller
     {
+        #region Data and Const
+
         private readonly ApplicationDbContext _context;
 
         public DrugsController(ApplicationDbContext context)
@@ -19,13 +16,17 @@ namespace IH.DrugStore.Web.Controllers
             _context = context;
         }
 
-        // GET: Drugs
+        #endregion
+
+        #region Actions
+
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Drugs.ToListAsync());
+            var drugs = await _context.Drugs.ToListAsync();
+
+            return View(drugs);
         }
 
-        // GET: Drugs/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -43,18 +44,14 @@ namespace IH.DrugStore.Web.Controllers
             return View(drug);
         }
 
-        // GET: Drugs/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Drugs/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Price")] Drug drug)
+        public async Task<IActionResult> Create(Drug drug)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +62,6 @@ namespace IH.DrugStore.Web.Controllers
             return View(drug);
         }
 
-        // GET: Drugs/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -81,12 +77,9 @@ namespace IH.DrugStore.Web.Controllers
             return View(drug);
         }
 
-        // POST: Drugs/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price")] Drug drug)
+        public async Task<IActionResult> Edit(int id, Drug drug)
         {
             if (id != drug.Id)
             {
@@ -116,7 +109,6 @@ namespace IH.DrugStore.Web.Controllers
             return View(drug);
         }
 
-        // GET: Drugs/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -134,7 +126,6 @@ namespace IH.DrugStore.Web.Controllers
             return View(drug);
         }
 
-        // POST: Drugs/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -149,9 +140,15 @@ namespace IH.DrugStore.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        #endregion
+
+        #region Private Methods
+
         private bool DrugExists(int id)
         {
             return _context.Drugs.Any(e => e.Id == id);
         }
+
+        #endregion
     }
 }
