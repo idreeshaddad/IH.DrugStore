@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IH.DrugStore.Web.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231207160402_Drugs_barcode")]
+    [Migration("20231210161905_Drugs_barcode")]
     partial class Drugs_barcode
     {
         /// <inheritdoc />
@@ -34,7 +34,6 @@ namespace IH.DrugStore.Web.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("BarCode")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -47,6 +46,23 @@ namespace IH.DrugStore.Web.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Drugs");
+                });
+
+            modelBuilder.Entity("IH.DrugStore.Web.Data.Entities.DrugType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DrugTypes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
