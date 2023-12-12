@@ -1,4 +1,5 @@
-﻿@model IEnumerable<IH.DrugStore.Web.Data.Entities.Drug>
+﻿@using IH.DrugStore.Web.Models.Drugs
+@model IEnumerable<DrugListViewModel>
 
 @{
     ViewData["Title"] = "Drugs";
@@ -27,6 +28,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.BarCode)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DrugTypeName)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -45,6 +49,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => drug.BarCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => drug.DrugTypeName)
                 </td>
                 <td>
                     <a asp-action="Details" asp-route-id="@drug.Id" class="text-decoration-none">
