@@ -24,6 +24,7 @@ namespace IH.DrugStore.Web.Controllers
 
         #region Actions
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var drugs = await _context
@@ -36,6 +37,7 @@ namespace IH.DrugStore.Web.Controllers
             return View(drugVMs);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -43,16 +45,23 @@ namespace IH.DrugStore.Web.Controllers
                 return NotFound();
             }
 
-            var drug = await _context.Drugs
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var drug = await _context
+                                .Drugs
+                                .Include(drug => drug.DrugType)
+                                .Where(drug => drug.Id == id) // Id from URL example: 17
+                                .SingleOrDefaultAsync();
+
             if (drug == null)
             {
                 return NotFound();
             }
 
-            return View(drug);
+            var drugVM = _mapper.Map<Drug, DrugDetailsViewModel>(drug);
+
+            return View(drugVM);
         }
 
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
@@ -60,17 +69,21 @@ namespace IH.DrugStore.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Drug drug)
+        public async Task<IActionResult> Create(CreateUpdateDrugViewModel drugVM)
         {
             if (ModelState.IsValid)
             {
+                var drug = _mapper.Map<CreateUpdateDrugViewModel, Drug>(drugVM);
+
                 _context.Add(drug);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(drug);
+
+            return View(drugVM);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -118,6 +131,7 @@ namespace IH.DrugStore.Web.Controllers
             return View(drug);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

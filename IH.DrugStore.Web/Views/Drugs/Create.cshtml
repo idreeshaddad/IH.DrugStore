@@ -1,4 +1,5 @@
-﻿@model IH.DrugStore.Web.Data.Entities.Drug
+﻿@using IH.DrugStore.Web.Models.Drugs
+@model CreateUpdateDrugViewModel
 
 @{
     ViewData["Title"] = "Create Drug";
@@ -32,6 +33,12 @@
                 <input asp-for="BarCode" class="form-control" />
                 <span asp-validation-for="BarCode" class="text-danger"></span>
             </div>
+
+            <@* div class="form-group mt-3">
+                <label asp-for="DrugTypeId" class="control-label"></label>
+                <select asp-for="DrugTypeId" class="form-control"></select>
+                <span asp-validation-for="DrugTypeId" class="text-danger"></span>
+            </div> *@
 
         </div>
     </div>
