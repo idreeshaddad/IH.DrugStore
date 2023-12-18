@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using IH.DrugStore.Web.Data;
 using IH.DrugStore.Web.Data.Entities;
+using AutoMapper;
+using IH.DrugStore.Web.Models.Customers;
 
 namespace IH.DrugStore.Web.Controllers
 {
@@ -10,10 +12,12 @@ namespace IH.DrugStore.Web.Controllers
         #region Data and Constructor
 
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public CustomersController(ApplicationDbContext context)
+        public CustomersController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         #endregion
@@ -22,7 +26,13 @@ namespace IH.DrugStore.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Customers.ToListAsync());
+            var customers = await _context
+                                .Customers
+                                .ToListAsync();
+
+            var customerVMs = _mapper.Map<List<Customer>, List<CustomerListViewModel>>(customers);
+
+            return View(customerVMs);
         }
 
         public async Task<IActionResult> Details(int? id)

@@ -1,25 +1,25 @@
-﻿@model IEnumerable<IH.DrugStore.Web.Data.Entities.Customer>
+﻿@using IH.DrugStore.Web.Models.Customers
+@model IEnumerable<CustomerListViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Customers";
 }
 
-<h1>Index</h1>
-
+<h1>Customers</h1>
+<hr />
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-primary" asp-action="Create">Create New</a>
 </p>
+<hr />
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.FirstName)
+                @Html.DisplayNameFor(model => model.FullName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateOfBirth)
+                @Html.DisplayNameFor(model => model.Age)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.PhoneNumber)
@@ -34,13 +34,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
+                @Html.DisplayFor(modelItem => item.FullName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateOfBirth)
+                @Html.DisplayFor(modelItem => item.Age)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.PhoneNumber)
