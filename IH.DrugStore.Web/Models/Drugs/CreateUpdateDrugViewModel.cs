@@ -1,4 +1,5 @@
-﻿using IH.DrugStore.Web.Data.Entities;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
 namespace IH.DrugStore.Web.Models.Drugs
@@ -15,5 +16,9 @@ namespace IH.DrugStore.Web.Models.Drugs
 
         [Display(Name = "Drug Type")]
         public int DrugTypeId { get; set; }
+
+
+        [ValidateNever]
+        public SelectList DrugTypeSelectList { get; set; }
     }
 }

@@ -10,7 +10,8 @@ namespace IH.DrugStore.Web.AutoMapperProfiles
         {
             CreateMap<Drug, DrugListViewModel>();
             CreateMap<Drug, DrugDetailsViewModel>();
-            CreateMap<CreateUpdateDrugViewModel, Drug>();
+
+            CreateMap<CreateUpdateDrugViewModel, Drug>().ReverseMap();
         }
     }
 }

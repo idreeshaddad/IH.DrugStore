@@ -4,6 +4,7 @@ using IH.DrugStore.Web.Data;
 using IH.DrugStore.Web.Data.Entities;
 using AutoMapper;
 using IH.DrugStore.Web.Models.Drugs;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace IH.DrugStore.Web.Controllers
 {
@@ -64,7 +65,10 @@ namespace IH.DrugStore.Web.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            var createVM = new CreateUpdateDrugViewModel();
+            createVM.DrugTypeSelectList = new SelectList(_context.DrugTypes, "Id", "Name");
+
+            return View(createVM);
         }
 
         [HttpPost]
@@ -79,6 +83,8 @@ namespace IH.DrugStore.Web.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            
+            drugVM.DrugTypeSelectList = new SelectList(_context.DrugTypes, "Id", "Name");
 
             return View(drugVM);
         }
@@ -92,18 +98,22 @@ namespace IH.DrugStore.Web.Controllers
             }
 
             var drug = await _context.Drugs.FindAsync(id);
+
             if (drug == null)
             {
                 return NotFound();
             }
-            return View(drug);
+
+            var editVM = _mapper.Map<Drug, CreateUpdateDrugViewModel>(drug);
+            editVM.DrugTypeSelectList = new SelectList(_context.DrugTypes, "Id", "Name");
+            return View(editVM);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Drug drug)
+        public async Task<IActionResult> Edit(int id, CreateUpdateDrugViewModel editVM)
         {
-            if (id != drug.Id)
+            if (id != editVM.Id)
             {
                 return NotFound();
             }
@@ -112,12 +122,14 @@ namespace IH.DrugStore.Web.Controllers
             {
                 try
                 {
+                    var drug = _mapper.Map<CreateUpdateDrugViewModel, Drug>(editVM);
+
                     _context.Update(drug);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!DrugExists(drug.Id))
+                    if (!DrugExists(editVM.Id))
                     {
                         return NotFound();
                     }
@@ -128,7 +140,8 @@ namespace IH.DrugStore.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(drug);
+
+            return View(editVM);
         }
 
         [HttpGet]
