@@ -27,8 +27,9 @@ namespace IH.DrugStore.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var customers = await _context
-                                .Customers
-                                .ToListAsync();
+                                    .Customers
+                                    .OrderBy(customer => customer.FirstName)
+                                    .ToListAsync();
 
             var customerVMs = _mapper.Map<List<Customer>, List<CustomerListViewModel>>(customers);
 
@@ -42,16 +43,23 @@ namespace IH.DrugStore.Web.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customers
-                .FirstOrDefaultAsync(m => m.Id == id);
+            // TO DO add Orders to customer details
+            var customer = await _context
+                                    .Customers
+                                    .Where(customer => customer.Id == id)
+                                    .SingleOrDefaultAsync();
+
             if (customer == null)
             {
                 return NotFound();
             }
 
-            return View(customer);
+            var customerVM = _mapper.Map<Customer, CustomerDetailsViewModel>(customer);
+
+            return View(customerVM);
         }
 
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
@@ -59,17 +67,21 @@ namespace IH.DrugStore.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Customer customer)
+        public async Task<IActionResult> Create(CreateUpdateCustomerViewModel customerVM)
         {
             if (ModelState.IsValid)
             {
+                var customer = _mapper.Map<CreateUpdateCustomerViewModel, Customer>(customerVM);
+
                 _context.Add(customer);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(customer);
+
+            return View(customerVM);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -77,19 +89,30 @@ namespace IH.DrugStore.Web.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customers.FindAsync(id);
+            //var customer = await _context
+            //                        .Customers
+            //                        .FindAsync(id);
+
+            var customer = await _context
+                                    .Customers
+                                    .Where(customer => customer.Id == id)
+                                    .SingleOrDefaultAsync();
+
             if (customer == null)
             {
                 return NotFound();
             }
-            return View(customer);
+
+            var customerVM = _mapper.Map<Customer, CreateUpdateCustomerViewModel>(customer);
+
+            return View(customerVM);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Customer customer)
+        public async Task<IActionResult> Edit(int id, CreateUpdateCustomerViewModel customerVM)
         {
-            if (id != customer.Id)
+            if (id != customerVM.Id)
             {
                 return NotFound();
             }
@@ -98,12 +121,14 @@ namespace IH.DrugStore.Web.Controllers
             {
                 try
                 {
+                    var customer = _mapper.Map<CreateUpdateCustomerViewModel, Customer>(customerVM);
+
                     _context.Update(customer);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CustomerExists(customer.Id))
+                    if (!CustomerExists(customerVM.Id))
                     {
                         return NotFound();
                     }
@@ -112,11 +137,14 @@ namespace IH.DrugStore.Web.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(customer);
+
+            return View(customerVM);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,14 +152,19 @@ namespace IH.DrugStore.Web.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customers
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var customer = await _context
+                                    .Customers
+                                    .Where(customer => customer.Id == id)
+                                    .SingleOrDefaultAsync();
+
             if (customer == null)
             {
                 return NotFound();
             }
 
-            return View(customer);
+            var customerVM = _mapper.Map<Customer, CustomerDetailsViewModel>(customer);
+
+            return View(customerVM);
         }
 
         [HttpPost, ActionName("Delete")]
