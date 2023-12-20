@@ -2,21 +2,36 @@
 using Microsoft.EntityFrameworkCore;
 using IH.DrugStore.Web.Data;
 using IH.DrugStore.Web.Data.Entities;
+using AutoMapper;
+using IH.DrugStore.Web.Models.DrugTypes;
 
 namespace IH.DrugStore.Web.Controllers
 {
     public class DrugTypesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        #region Data and Constructor
 
-        public DrugTypesController(ApplicationDbContext context)
+        private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
+
+        public DrugTypesController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
+        #endregion
+
+        #region Actions
         public async Task<IActionResult> Index()
         {
-            return View(await _context.DrugTypes.ToListAsync());
+            var drugTypes = await _context
+                                    .DrugTypes
+                                    .ToListAsync();
+
+            var drugTypeVMs = _mapper.Map<List<DrugType>, List<DrugTypeViewModel>>(drugTypes);
+
+            return View(drugTypeVMs);
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -132,9 +147,15 @@ namespace IH.DrugStore.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        #endregion
+
+        #region Private Methods
+
         private bool DrugTypeExists(int id)
         {
             return _context.DrugTypes.Any(e => e.Id == id);
-        }
+        } 
+
+        #endregion
     }
 }

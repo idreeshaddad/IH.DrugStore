@@ -1,15 +1,18 @@
-﻿@model IEnumerable<IH.DrugStore.Web.Data.Entities.DrugType>
+﻿@using IH.DrugStore.Web.Models.DrugTypes
+@model IEnumerable<DrugTypeViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Drug Types";
 }
 
-<h1>Index</h1>
-
+<h1>Drug Types</h1>
+<hr />
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-primary" asp-action="Create">Create New Drug Type</a>
 </p>
-<table class="table">
+<hr />
+
+<table class="table table-hover table-striped">
     <thead>
         <tr>
             <th>
@@ -19,17 +22,24 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var drugType in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => drugType.Name)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@drugType.Id" class="text-decoration-none">
+                        <i class="fa-solid fa-circle-info text-info" title="Details"></i>
+                    </a>
+                    <a asp-action="Edit" asp-route-id="@drugType.Id" title="Edit" class="text-decoration-none ms-2">
+                        <i class="fa-solid fa-pencil text-primary"></i>
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@drugType.Id" title="Delete" class="text-decoration-none ms-2">
+                        <i class="fa-solid fa-trash text-danger"></i>
+                    </a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
