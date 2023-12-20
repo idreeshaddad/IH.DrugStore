@@ -1,4 +1,5 @@
 ﻿using IH.DrugStore.Web.Enums;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
 
 namespace IH.DrugStore.Web.Models.Customers
@@ -24,5 +25,10 @@ namespace IH.DrugStore.Web.Models.Customers
         public string? PhoneNumber { get; set; }
 
         public Gender Gender { get; set; }
+
+
+        [Display(Name = "Full Name")]
+        [ValidateNever]
+        public string FullName { get; set; }
     }
 }

@@ -31,24 +31,39 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var customer in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.FullName)
+                @Html.DisplayFor(modelItem => customer.FullName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Age)
+                @Html.DisplayFor(modelItem => customer.Age)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PhoneNumber)
+                    @if(customer.PhoneNumber == null)
+                    {
+                        <span class="fst-italic text-muted">
+                            <i class="fa-solid fa-minus"></i>
+                        </span>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => customer.PhoneNumber)
+                    }
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Gender)
+                @Html.DisplayFor(modelItem => customer.Gender)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a asp-action="Details" asp-route-id="@customer.Id" class="text-decoration-none">
+                        <i class="fa-solid fa-circle-info text-info" title="Details"></i>
+                    </a>
+                    <a asp-action="Edit" asp-route-id="@customer.Id" title="Edit" class="text-decoration-none ms-2">
+                        <i class="fa-solid fa-pencil text-primary"></i>
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@customer.Id" title="Delete" class="text-decoration-none ms-2">
+                        <i class="fa-solid fa-trash text-danger"></i>
+                    </a>
             </td>
         </tr>
 }
